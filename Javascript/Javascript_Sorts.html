@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Sorts</title>
+	<style type="text/css">
+		table, td {
+			border: 1px solid green;
+		}
+	</style>
+</head>
+<body>
+	
+</body>
+
+<script type="text/javascript">
+	var nElements = 50;
+
+	var elements = [];
+	for(i=0;i<nElements;i++)
+		elements[i] = Math.floor(Math.random()*100);
+
+	// Function to create elements and show them in the page
+	function createElements(array, low, high) {
+		document.body.appendChild(createTable(array, low, high));
+	}
+	function createTable(array, low, high) {
+		var table = document.createElement("table");
+		var tr =  document.createElement("tr");
+		for(i=0;i<array.length;i++) {
+			var td = document.createElement("td");
+			if(i == low)
+				td.style.backgroundColor = "#ff0";
+			if(i == high)
+				td.style.backgroundColor = "#ff0";
+			td.appendChild(document.createTextNode(array[i]));
+			tr.appendChild(td);
+		}
+		table.appendChild(tr);
+		return table;
+	}
+
+
+	// Quick Sort
+	function quickSort(array, low, high) {
+		if(array == null || array.length == 0)
+			return;
+
+		if (low < high) {
+			var pivot = partition(array, low, high);
+			if(low < pivot-1)
+				quickSort(array, low, pivot-1);
+			if(pivot < high)
+				quickSort(array, pivot, high);
+		}
+	}
+	function partition(array, low, high) {
+		var pivot = array[Math.floor((low+high)/2)];
+		var i = low, j = high;
+		while(i <= j) {
+			while(array[i] < pivot)
+				i++;
+			while(array[j] > pivot)
+				j--;
+			if(i <= j) {
+				swap(array, i, j);
+				i++;
+				j--;
+			}
+		}
+		return i;
+	}
+	function swap(array, first, second) {
+		var temp = array[first];
+		array[first] = array[second];
+		array[second] = temp;
+		createElements(array, first, second);
+	}
+
+	// Bubble Sort
+	function bubbleSort(array) {
+		if(array == null || array.length == 0)
+			return;
+
+		var i = array.length+1;
+		while(i > 0) {
+			var j = 0;
+			while(j < i) {
+				if(array[j] > array[j+1])
+					swap(array, j, j+1);
+				j++;
+			}
+			i--;
+		}
+	}
+
+	// Merge Sort
+	function mergeSort(array, start, end) {
+		if(array == null || array.length == 0)
+			return;
+
+		if(end <= start) 
+			return;
+		var medium = Math.floor((start + end) / 2);
+		mergeSort(array, start, medium);
+		mergeSort(array, medium + 1, end);
+		var A = [], B = [];
+		for(var i=0; i<=medium-start; i++) {
+			A[i] = array[start + i];
+		}
+		for(var i=0; i<=end-medium-1; i++) {
+			B[i] = array[medium + i + 1];
+		}
+		var i = j = 0;
+		for(var k=start;k<=end;k++) {
+			if(i < A.length && j < B.length) {
+				if(A[i] < B[j]) {
+					array[k] = A[i++];
+				} else {
+					array[k] = B[j++];
+				}
+			} else if(i < A.length) {
+				array[k] = A[i++];
+			} else if(j < B.length) {
+				array[k] = B[j++];
+			}
+			createElements(array, k, -1);
+		}
+	}
+
+	// Insert Sort
+	function insertionSort(array) {
+		if(array == null || array.length == 0)
+			return;
+
+		for(var i=0;i < array.length;i++) {
+			for(var j=i; j > 0; j--) {
+				if(array[j-1] > array[j])
+					swap(array, j-1, j);
+				else
+					break;
+			}
+		}
+	}
+
+	// Select Sort
+	function selectionSort(array) {
+		if(array == null || array.length == 0)
+			return;
+
+		var i = 0;
+		while(i < array.length) {
+			var menor = i;
+			for(var j=i+1; j<array.length; j++)
+				if(array[menor] > array[j])
+					menor = j;
+			if(menor != i)
+				swap(array, menor, i);
+			i++;
+		}
+	}
+
+	// Comb Sort
+	function combSort(array) {
+		if(array == null || array.length == 0)
+			return;
+
+		var gap = array.length;
+		var shrink = 1.3;
+		var swapped = false;
+		while(gap != 1 || !swapped) {
+			gap	= Math.floor(gap/shrink);
+			if(gap < 1)
+				gap = 1;
+
+			swapped = false;
+			var i = 0;
+			while(i + gap <= array.length) {
+				if(array[i] > array[i+gap]) {
+					swap(array, i, i+gap);
+					swapped = true;
+				}
+				i++;
+			}
+		}
+	}
+
+	// 
+
+	createElements(elements, -1, -1);
+	//quickSort(elements, 0, elements.length-1);
+	//bubbleSort(elements);
+	//createElements(elements, -1, -1);
+	//mergeSort(elements, 0, elements.length-1);
+	//insertionSort(elements);
+	//selectionSort(elements);
+	combSort(elements);
+</script>
+
+</html>

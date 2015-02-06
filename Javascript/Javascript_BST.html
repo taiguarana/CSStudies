@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Binary Search Tree</title>
+</head>
+<body>
+
+</body>
+
+<script type="text/javascript">
+	
+	// "Class" to represent the nodes and its operations and attributes
+	function Node(data) {
+		this.data = data;	// Data
+		this.left = null;	// Left side of the tree
+		this.right = null;	// Right side of the tree
+
+		// Insert method
+		this.insert = function(newNode) {
+			if(newNode == null || newNode == this.data)
+				return false;
+			if(newNode.data > this.data) {
+				if(this.right == null)
+					this.right = newNode;
+				else
+					this.right.insert(newNode);
+			}
+			else {
+				if(this.left == null)
+					this.left = newNode;
+				else
+					this.left.insert(newNode);
+			}
+			return true;
+		};
+
+		// Exists method (check if some value exists in the tree)
+		this.exists = function(value) {
+			if(this.data == value)
+				return true;
+			else if(value < this.data && this.left != null)
+				return this.left.exists(value);
+			else if(value > this.data && this.right != null)
+				return this.right.exists(value);
+			else
+				return false;
+		};
+
+		// Show method
+		this.show = function() {
+			document.body.innerHTML = "";
+			index = 0;
+			this.showAux(this);
+		};
+		// Auxiliar method to show
+		this.showAux = function(node) {
+			if(node == null)
+				return;
+			if(node.data != null) {
+				var value = "";
+				index++;
+				for(i=0;i<index;i++)
+					value += ">";
+				value += node.data;
+				document.body.appendChild(document.createTextNode(value));
+				document.body.appendChild(document.createElement("br"));
+				node.showAux(node.left);
+				node.showAux(node.right);
+				index--;
+			}
+		};
+	}
+
+	root = new Node(50);
+	n1 = new Node(6);
+	n2 = new Node(30);
+	n3 = new Node(40);
+	n4 = new Node(80);
+	root.insert(n1);
+	root.insert(n2);
+	root.insert(n3);
+	root.insert(n4);
+
+	alert(root.exists(85));
+	root.show();
+	</script>
+
+</html>

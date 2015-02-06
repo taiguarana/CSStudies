@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Subconjunto</title>
+</head>
+<body>
+<p id="result"></p>
+</body>
+<script type="text/javascript">
+	var set = [];
+	var nElements = 3;
+	for(var i=0; i<nElements; i++)
+		set[i] = Math.floor(Math.random()*10);
+
+	// This function get a pretty string representing the set passed by parameter
+	function getSetString(set) {
+		var text = "[";
+		for(var i=0; i<set.length; i++) {
+			if(set[i].constructor == Array) {
+				text += getSetString(set[i]);
+			} else {
+				text += set[i];
+			}
+
+			if(i+1 != set.length)
+				text +=", ";
+		}
+		text += "]";
+		return text;
+	}
+
+	// This function shows the set inside the P element in the body
+	function showSet(set) {
+		var text = getSetString(set);
+		document.getElementById("result").innerHTML += text+"<br>";
+	}
+
+	// This function gets all the subsets from a set 
+	function getAllSubsets(set) {
+		var nElements = set.length;
+		var result = [];
+		if(nElements == 0 || set.constructor != Array)
+			return result;
+
+		var newElementsNumber = Math.pow(2,nElements);
+		result[0] = [];
+		for(var i=1; i<newElementsNumber; i++) {
+			var tempArray = [];
+			var currentBin = i.toString(2);
+			var setIterator = 0;
+			console.log("Bin: "+currentBin);
+			for(var j=currentBin.length-1; j>=0; j--) {
+				if(parseInt(currentBin[j],2) == 1) {
+					tempArray.push(set[setIterator]);
+				}
+				setIterator++;
+			}
+			console.log(tempArray);
+			result.push(tempArray);
+		}
+
+		return result;
+	}
+
+	showSet(set);
+	showSet(getAllSubsets(set));
+</script>
+</html>
